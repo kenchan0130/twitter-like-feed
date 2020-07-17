@@ -110,7 +110,8 @@ func main() {
 	})
 	r.GET("/feed/:username", func(c *gin.Context) {
 		username := c.Param("username")
-		tweetList, err := getTwitterLike(username, "ja")
+		lang := c.DefaultQuery("lang", "ja")
+		tweetList, err := getTwitterLike(username, lang)
 		if err != nil {
 			c.String(http.StatusInternalServerError, err.Error())
 			return
