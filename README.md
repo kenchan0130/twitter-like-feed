@@ -8,7 +8,7 @@ Sample is [here](https://twitter-like-feed.herokuapp.com/).
 
 | endpoint          | content                                        |
 |-------------------|------------------------------------------------|
-| `/`               | return "ping" as text                          |
+| `/`               | return "pong" as text                          |
 | `/feed/:username` | return a rss feed of username (without atmark) |
 
 ## Development
