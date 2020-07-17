@@ -113,14 +113,14 @@ func main() {
 		lang := c.DefaultQuery("lang", "ja")
 		tweetList, err := getTwitterLike(username, lang)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			c.String(http.StatusInternalServerError, err.Error())
 			return
 		}
 
 		rss, err := generateFeed(username, *tweetList)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			c.String(http.StatusInternalServerError, err.Error())
 			return
 		}
