@@ -96,6 +96,27 @@ func generateFeed(username string, tweetList []Tweet) (string, error) {
 	return feed.ToRss()
 }
 
+func feedHandler(c *gin.Context) {
+	username := c.Param("username")
+	lang := c.DefaultQuery("lang", "ja")
+	tweetList, err := getTwitterLike(username, lang)
+	if err != nil {
+		log.Println(err)
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	rss, err := generateFeed(username, *tweetList)
+	if err != nil {
+		log.Println(err)
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.Header("Content-Type", "application/xml; charset=utf-8")
+	c.String(http.StatusOK, rss)
+}
+
 func main() {
 	port := 8080
 	if len(os.Args) > 1 {
@@ -108,26 +129,9 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
-	r.GET("/feed/:username", func(c *gin.Context) {
-		username := c.Param("username")
-		lang := c.DefaultQuery("lang", "ja")
-		tweetList, err := getTwitterLike(username, lang)
-		if err != nil {
-			log.Println(err)
-			c.String(http.StatusInternalServerError, err.Error())
-			return
-		}
 
-		rss, err := generateFeed(username, *tweetList)
-		if err != nil {
-			log.Println(err)
-			c.String(http.StatusInternalServerError, err.Error())
-			return
-		}
-
-		c.Header("Content-Type", "application/xml; charset=utf-8")
-		c.String(http.StatusOK, rss)
-	})
+	r.HEAD("/feed/:username", feedHandler)
+	r.GET("/feed/:username", feedHandler)
 
 	r.Run(fmt.Sprintf(":%d", port))
 }
