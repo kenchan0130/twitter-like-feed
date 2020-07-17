@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -96,6 +98,12 @@ func generateFeed(username string, tweetList []Tweet) (string, error) {
 }
 
 func main() {
+	var port = 8080
+	if len(os.Args) > 1 {
+		p, _ := strconv.Atoi(os.Args[1])
+		port = p
+	}
+
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "pong")
@@ -117,5 +125,5 @@ func main() {
 		c.Header("Content-Type", "application/xml; charset=utf-8")
 		c.String(http.StatusOK, rss)
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080 as default
+	r.Run(fmt.Sprintf(":%d", port))
 }
