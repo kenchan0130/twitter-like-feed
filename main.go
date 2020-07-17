@@ -98,7 +98,7 @@ func generateFeed(username string, tweetList []Tweet) (string, error) {
 }
 
 func main() {
-	var port = 8080
+	port := 8080
 	if len(os.Args) > 1 {
 		p, _ := strconv.Atoi(os.Args[1])
 		port = p
