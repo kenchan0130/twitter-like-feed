@@ -13,13 +13,20 @@ Sample is [here](https://twitter-like-feed.herokuapp.com/).
 
 | endpoint          | content                                        |
 |-------------------|------------------------------------------------|
-| `/`               | return "pong" as text                          |
+| `/`               | redirect to `/health`                          |
+| `/health`         | return "ok" as text                            |
 | `/feed/:username` | return a rss feed of username (without atmark) |
 
 ## Development
 
 ```sh
 go get -u github.com/kenchan0130/twitter-like-feed
+```
+
+You may also clone this project instead.
+And, please run the program.
+
+```sh
 go run main.go
 ```
 
