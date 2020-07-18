@@ -44,3 +44,20 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.28
+
+  deploy:
+    needs:
+      - test
+      - lint
+    if: contains(github.ref, 'master')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.2.6
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "twitter-like-feed"
+          heroku_email: ${{ secrets.HEROKU_USER_EMAIL }}
+          usedocker: true
+          healthcheck: "https://twitter-like-feed.herokuapp.com/health"
+          checkstring: "ok"
