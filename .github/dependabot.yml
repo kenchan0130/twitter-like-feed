@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: "go:modules"
+    directory: "/"
+    schedule:
+      interval: monthly
+      time: "20:00"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: monthly
+      time: "20:00"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: monthly
+      time: "20:00"
