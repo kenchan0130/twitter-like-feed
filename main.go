@@ -53,13 +53,14 @@ func getTwitterLike(username string, lang string) (*[]Tweet, error) {
 
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(twitterLikesResponse.Body))
 
-	var tweetList = make([]Tweet, 0)
+	tweetList := make([]Tweet, 0)
+	tweetDateTimeLayout := "2006-01-02T15:04:05+0000"
 	doc.Find(".timeline-TweetList-tweet").Each(func(i int, s *goquery.Selection) {
 		tweetAuthorName := s.Find(".TweetAuthor-name").Text()
 		tweetAuthorScreenName := s.Find(".TweetAuthor-screenName").Text() // With @ mark
 		tweetText := s.Find(".timeline-Tweet-text").Text()
 		tweetURL := s.Find(".timeline-Tweet-timestamp").AttrOr("href", "")
-		tweetDateTime, _ := time.Parse("2020-07-14T03:30:09+0000", s.Find(".dt-updated").AttrOr("datetime", ""))
+		tweetDateTime, _ := time.Parse(tweetDateTimeLayout, s.Find(".dt-updated").AttrOr("datetime", ""))
 
 		tweet := Tweet{
 			AuthorName:       tweetAuthorName,
@@ -133,5 +134,9 @@ func main() {
 	r.HEAD("/feed/:username", feedHandler)
 	r.GET("/feed/:username", feedHandler)
 
-	r.Run(fmt.Sprintf(":%d", port))
+	err := r.Run(fmt.Sprintf(":%d", port))
+	if err != nil {
+		log.Fatalf(err.Error())
+		os.Exit(1)
+	}
 }
