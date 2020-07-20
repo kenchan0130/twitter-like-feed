@@ -32,8 +32,8 @@ type TwitterLikesResponse struct {
 	Body string `json:"body"`
 }
 
-func getTwitterLike(username string, lang string) (*[]Tweet, error) {
-	url := fmt.Sprintf("https://syndication.twitter.com/timeline/likes?lang=%s&screen_name=%s", lang, username)
+func getTwitterLike(username string) (*[]Tweet, error) {
+	url := fmt.Sprintf("https://syndication.twitter.com/timeline/likes?dnt=false&suppress_response_codes=true&screen_name=%s", username)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("An error occurred while trying to access %s, err: %s", url, err.Error())
@@ -96,9 +96,8 @@ func generateFeed(username string, tweetList []Tweet) (string, error) {
 }
 
 func FeedUsernameGetHandler(c *gin.Context) {
-	username := c.Param("username")
-	lang := c.DefaultQuery("lang", "ja")
-	tweetList, err := getTwitterLike(username, lang)
+	username := strings.Replace(strings.TrimSpace(c.Param("username")), "@", "", 1)
+	tweetList, err := getTwitterLike(username)
 	if err != nil {
 		log.Println(err)
 		c.String(http.StatusInternalServerError, err.Error())
