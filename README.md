@@ -11,11 +11,11 @@ Sample is [here](https://twitter-like-feed.herokuapp.com/).
 
 ## Endpoints
 
-| endpoint          | content                                        |
-|-------------------|------------------------------------------------|
-| `/`               | redirect to `/health`                          |
-| `/health`         | return "ok" as text                            |
-| `/feed/:username` | return a rss feed of username (without atmark) |
+| endpoint          | content                        |
+|-------------------|--------------------------------|
+| `/`               | redirect to `/health`.         |
+| `/health`         | return "ok" as text.           |
+| `/feed/:username` | return a rss feed of username. |
 
 ## Development
 
