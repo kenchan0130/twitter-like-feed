@@ -32,6 +32,4 @@ go run main.go
 
 ## Deploy
 
-```sh
-git push heroku master
-```
+Any changes to the mastar branch are automatically deployed to heroku by GitHub Action.
