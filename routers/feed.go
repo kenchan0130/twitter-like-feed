@@ -46,7 +46,7 @@ func getTwitterLike(username string) (*[]Tweet, error) {
 	var twitterLikesResponse TwitterLikesResponse
 	err = json.NewDecoder(res.Body).Decode(&twitterLikesResponse)
 	if err != nil {
-		return nil, fmt.Errorf("%s response returned an unexpected JSON. err: %s\n\n%s", url, err.Error(), twitterLikesResponse.Body)
+		return nil, fmt.Errorf("%s response returned an unexpected JSON. err: %s\n\n%s", url, err.Error(), res.Body)
 	}
 
 	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(twitterLikesResponse.Body))
