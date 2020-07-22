@@ -53,12 +53,17 @@ func getTwitterLike(username string) (*[]Tweet, error) {
 
 	tweetList := make([]Tweet, 0)
 	tweetDateTimeLayout := "2006-01-02T15:04:05+0000"
+	hasInvalidResponse := false
 	doc.Find(".timeline-TweetList-tweet").Each(func(i int, s *goquery.Selection) {
-		tweetAuthorName := s.Find(".TweetAuthor-name").Text()
-		tweetAuthorScreenName := s.Find(".TweetAuthor-screenName").Text() // With @ mark
-		tweetText := s.Find(".timeline-Tweet-text").Text()
-		tweetURL := s.Find(".timeline-Tweet-timestamp").AttrOr("href", "")
-		tweetDateTime, _ := time.Parse(tweetDateTimeLayout, s.Find(".dt-updated").AttrOr("datetime", ""))
+		tweetAuthorName := strings.TrimSpace(s.Find(".TweetAuthor-name").Text())
+		tweetAuthorScreenName := strings.TrimSpace(s.Find(".TweetAuthor-screenName").Text()) // With @ mark
+		tweetText := strings.TrimSpace(s.Find(".timeline-Tweet-text").Text())
+		tweetURL := strings.TrimSpace(s.Find(".timeline-Tweet-timestamp").AttrOr("href", ""))
+		tweetDateTime, err := time.Parse(tweetDateTimeLayout, strings.TrimSpace(s.Find(".dt-updated").AttrOr("datetime", "")))
+
+		if len(tweetAuthorName) == 0 || len(tweetAuthorScreenName) == 0 || len(tweetText) == 0 || len(tweetURL) == 0 || err != nil {
+			hasInvalidResponse = true
+		}
 
 		tweet := Tweet{
 			AuthorName:       tweetAuthorName,
@@ -69,6 +74,10 @@ func getTwitterLike(username string) (*[]Tweet, error) {
 		}
 		tweetList = append(tweetList, tweet)
 	})
+
+	if hasInvalidResponse {
+		return nil, fmt.Errorf("%s response returned an unexpected HTML in body attribute.\n\n%s", url, res.Body)
+	}
 
 	return &tweetList, nil
 }
