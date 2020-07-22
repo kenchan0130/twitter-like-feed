@@ -87,6 +87,11 @@ func generateFeed(username string, tweetList []Tweet) (string, error) {
 		Title:       fmt.Sprintf("@%s like feed | Twitter Like Feed", username),
 		Link:        &feeds.Link{Href: fmt.Sprintf("https://twitter.com/%s/likes", username)},
 		Description: fmt.Sprintf("@%s updated like list feed.", username),
+		Image: &feeds.Image{
+			Link:  fmt.Sprintf("https://twitter.com/%s/likes", username),
+			Url:   "https://abs.twimg.com/responsive-web/web/icon-default.3c3b2244.png", // From https://twitter.com/manifest.json
+			Title: fmt.Sprintf("@%s like feed | Twitter Like Feed", username),
+		},
 	}
 	feed.Items = make([]*feeds.Item, 0)
 
