@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -32,6 +33,18 @@ type TwitterLikesResponse struct {
 	Body string `json:"body"`
 }
 
+var imgRe = regexp.MustCompile(`(?mi)<img(.*?)alt="(.+?)"(.*?)>`)
+var ankerLinkRe = regexp.MustCompile(`(?mi)<a(.*?)href="(.+?)"(.*?)>(.*?)(</a>)`)
+var hasktagRe = regexp.MustCompile(`(?mi)https://twitter.com/hashtag/(.+)\?\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`)
+
+func parseTweetTextHTML(str string) string {
+	extractImageStr := strings.Replace(strings.Replace(imgRe.ReplaceAllString(str, "$2"), "<br/>", "\n", -1), "<br>", "\n", -1)
+	extractAnkerLinkStr := ankerLinkRe.ReplaceAllString(extractImageStr, "$2")
+	extractHashtagStr := hasktagRe.ReplaceAllString(extractAnkerLinkStr, "#$1")
+	doc, _ := goquery.NewDocumentFromReader(strings.NewReader(extractHashtagStr))
+	return doc.Text()
+}
+
 func getTwitterLike(username string) (*[]Tweet, error) {
 	url := fmt.Sprintf("https://syndication.twitter.com/timeline/likes?dnt=false&suppress_response_codes=true&screen_name=%s", username)
 	res, err := http.Get(url)
@@ -57,11 +70,28 @@ func getTwitterLike(username string) (*[]Tweet, error) {
 	doc.Find(".timeline-TweetList-tweet").Each(func(i int, s *goquery.Selection) {
 		tweetAuthorName := strings.TrimSpace(s.Find(".TweetAuthor-name").Text())
 		tweetAuthorScreenName := strings.TrimSpace(s.Find(".TweetAuthor-screenName").Text()) // With @ mark
-		tweetText := strings.TrimSpace(s.Find(".timeline-Tweet-text").Text())
+		tweetTextHTML, err := s.Find(".timeline-Tweet-text").Html()
+
+		if err != nil {
+			log.Println(err)
+			hasInvalidResponse = true
+		}
+
+		tweetText := parseTweetTextHTML(tweetTextHTML)
+		log.Printf("TweetText: %s\n", tweetText)
 		tweetURL := strings.TrimSpace(s.Find(".timeline-Tweet-timestamp").AttrOr("href", ""))
 		tweetDateTime, err := time.Parse(tweetDateTimeLayout, strings.TrimSpace(s.Find(".dt-updated").AttrOr("datetime", "")))
 
-		if len(tweetAuthorName) == 0 || len(tweetAuthorScreenName) == 0 || len(tweetText) == 0 || len(tweetURL) == 0 || err != nil {
+		if err != nil {
+			log.Println(err)
+			hasInvalidResponse = true
+		}
+
+		if len(tweetAuthorName) == 0 || len(tweetAuthorScreenName) == 0 || len(tweetText) == 0 || len(tweetURL) == 0 {
+			log.Printf("TweetAutorName: %s\n", tweetAuthorName)
+			log.Printf("TweetAuthorScreenName: %s\n", tweetAuthorScreenName)
+			log.Printf("TweetText: %s\n", tweetText)
+			log.Printf("TweetURL: %s\n", tweetURL)
 			hasInvalidResponse = true
 		}
 
@@ -76,7 +106,7 @@ func getTwitterLike(username string) (*[]Tweet, error) {
 	})
 
 	if hasInvalidResponse {
-		return nil, fmt.Errorf("%s response returned an unexpected HTML in body attribute.\n\n%s", url, res.Body)
+		return nil, fmt.Errorf("%s response returned an unexpected HTML in body attribute.\n\n%s", url, twitterLikesResponse.Body)
 	}
 
 	return &tweetList, nil
@@ -109,19 +139,20 @@ func generateFeed(username string, tweetList []Tweet) (string, error) {
 	return feed.ToRss()
 }
 
+// FeedUsernameGetHandler is function which returns Twitter like as feed
 func FeedUsernameGetHandler(c *gin.Context) {
 	username := strings.Replace(strings.TrimSpace(c.Param("username")), "@", "", 1)
 	tweetList, err := getTwitterLike(username)
 	if err != nil {
 		log.Println(err)
-		c.String(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, "Error. Please check server log.")
 		return
 	}
 
 	rss, err := generateFeed(username, *tweetList)
 	if err != nil {
 		log.Println(err)
-		c.String(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, "Error. Please check server log.")
 		return
 	}
 
