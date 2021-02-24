@@ -1,4 +1,4 @@
-FROM golang:latest as builder
+FROM golang:1.16 as builder
 
 ENV CGO_ENABLED=0
 ENV GOOS=linux
@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 RUN go build main.go
 
-FROM alpine:latest
+FROM alpine:3.13
 COPY --from=builder /app /app
 
 ENV GIN_MODE release
