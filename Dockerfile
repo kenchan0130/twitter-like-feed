@@ -1,4 +1,4 @@
-FROM golang:1.17.1 as builder
+FROM golang:1.17.6 as builder
 
 ENV CGO_ENABLED=0
 ENV GOOS=linux
