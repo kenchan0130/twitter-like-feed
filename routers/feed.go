@@ -46,7 +46,7 @@ func parseTweetTextHTML(str string) string {
 }
 
 func getTwitterLike(username string) (*[]Tweet, error) {
-	url := fmt.Sprintf("https://syndication.twitter.com/timeline/likes?dnt=false&suppress_response_codes=true&screen_name=%s", username)
+	url := fmt.Sprintf("https://cdn.syndication.twimg.com/timeline/likes?dnt=false&suppress_response_codes=true&screen_name=%s", username)
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("An error occurred while trying to access %s, err: %s", url, err.Error())
