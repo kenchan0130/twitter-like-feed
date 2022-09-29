@@ -58,12 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: fjogeleit/http-request-action@v1
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "twitter-like-feed"
-          heroku_email: ${{ secrets.HEROKU_USER_EMAIL }}
-          usedocker: true
-          healthcheck: "https://twitter-like-feed.herokuapp.com/health"
-          checkstring: "ok"
-          delay: 10
+          url: ${{ secrets.RENDER_COM_DEPLOY_HOOK_URL }}
+          method: 'GET'

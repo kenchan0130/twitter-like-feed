@@ -7,7 +7,7 @@
 
 A web application that provides the like of the target account of Twitter as rss feed.
 
-Sample is [here](https://twitter-like-feed.herokuapp.com/).
+Sample is [here](https://twitter-like-feed-19rl.onrender.com).
 
 ## Endpoints
 
