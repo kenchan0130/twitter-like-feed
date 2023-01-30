@@ -55,7 +55,7 @@ func generateFeed(username string, tweetList []*models.Tweet) (string, error) {
 			Link:        &feeds.Link{Href: tweetURL},
 			Description: fmt.Sprintf("@%s did LIKE %s tweet.", username, tweetURL),
 			Created:     tweet.CreatedAt,
-			Id:          strings.Join([]string{username, tweetURL}, "+"),
+			Id:          strings.Join([]string{tweetURL, username}, "+"),
 		}
 	})
 
