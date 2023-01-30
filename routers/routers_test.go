@@ -13,7 +13,7 @@ import (
 
 func TestInitRouter(t *testing.T) {
 	t.Run("GET /health returns 'ok' with status 200", func(t *testing.T) {
-		router := InitRouter()
+		router := Init()
 
 		w := httptest.NewRecorder()
 
@@ -26,7 +26,7 @@ func TestInitRouter(t *testing.T) {
 
 	t.Run("GET /feed/:username returns rss with status 200", func(t *testing.T) {
 		testUsername := "kenchan0130"
-		router := InitRouter()
+		router := Init()
 
 		w := httptest.NewRecorder()
 

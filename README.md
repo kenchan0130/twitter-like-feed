@@ -9,6 +9,12 @@ A web application that provides the like of the target account of Twitter as rss
 
 Sample is [here](https://twitter-like-feed-19rl.onrender.com).
 
+## Environment Variables
+
+| variable     | description                                                         |
+|--------------|---------------------------------------------------------------------|
+| BEARER_TOKEN | Bearer Token authenticates requests on behalf of your developer App |
+
 ## Endpoints
 
 | endpoint          | content                        |
