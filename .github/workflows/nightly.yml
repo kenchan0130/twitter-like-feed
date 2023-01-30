@@ -3,18 +3,21 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-env:
-  go-version: "1.16"
-
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+      - name: Get go version
+        id: go-version
+        run: |
+          GO_VERSION=$(grep -E '^go ' go.mod | awk '{print $2}')
+          echo "Go version is ${GO_VERSION}."
+          echo "GO_VERSION=${GO_VERSION}" >> ${GITHUB_OUTPUT}
       - uses: actions/setup-go@v3
         with:
-          go-version: "${{ env.go-version }}"
+          go-version: ${{ steps.go-version.outputs.GO_VERSION }}
       - name: cache
         uses: actions/cache@v3.2.2
         id: cache-go
@@ -30,3 +33,5 @@ jobs:
       - name: Test
         run: |
           go test -v ./...
+        env:
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
