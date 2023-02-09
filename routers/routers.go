@@ -2,11 +2,13 @@ package routers
 
 import (
 	"fmt"
+	"github.com/coocood/freecache"
 	"github.com/g8rswimmer/go-twitter/v2"
 	"github.com/kenchan0130/twitter-like-feed/controllers"
 	"github.com/kenchan0130/twitter-like-feed/repositories"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,6 +33,18 @@ func Init() *gin.Engine {
 		c.String(http.StatusOK, "ok")
 	})
 
+	cacheExpiresSecStr := os.Getenv("CACHE_EXPIRES_SECONDS")
+	var cacheExpiresSec int
+	if cacheExpiresSecStr == "" {
+		cacheExpiresSec = 60 * 60 * 2 // 60 * 60 * 2 is 2 hours
+	} else {
+		cacheExpiresSec, _ = strconv.Atoi(cacheExpiresSecStr)
+	}
+
+	rssRepository := repositories.RssRepository{
+		Cache:         freecache.NewCache(100 * 1024 * 1024), // 100 * 1024 * 1024 is 100MB
+		ExpireSeconds: cacheExpiresSec,
+	}
 	token := os.Getenv("BEARER_TOKEN")
 	twitterRepository := repositories.TwitterRepository{
 		Client: twitter.Client{
@@ -43,6 +57,7 @@ func Init() *gin.Engine {
 	}
 	feedCtrl := controllers.FeedController{
 		TwitterRepository: twitterRepository,
+		RssRepository:     rssRepository,
 	}
 	r.HEAD("/feed/:username", feedCtrl.Show)
 	r.GET("/feed/:username", feedCtrl.Show)

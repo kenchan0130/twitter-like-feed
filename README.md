@@ -11,9 +11,10 @@ Sample is [here](https://twitter-like-feed-19rl.onrender.com).
 
 ## Environment Variables
 
-| variable     | description                                                         |
-|--------------|---------------------------------------------------------------------|
-| BEARER_TOKEN | Bearer Token authenticates requests on behalf of your developer App |
+| variable              | description                                                         |
+|-----------------------|---------------------------------------------------------------------|
+| BEARER_TOKEN          | Bearer Token authenticates requests on behalf of your developer App |
+| CACHE_EXPIRES_SECONDS | Cache expires seconds for RSS Item, default 7200 (2 hr)             |
 
 ## Endpoints
 
