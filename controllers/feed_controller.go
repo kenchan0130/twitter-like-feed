@@ -14,10 +14,19 @@ import (
 
 type FeedController struct {
 	TwitterRepository repositories.TwitterRepository
+	RssRepository     repositories.RssRepository
 }
 
 func (fc FeedController) Show(c *gin.Context) {
 	username := strings.Replace(strings.TrimSpace(c.Param("username")), "@", "", 1)
+
+	cachedRss := fc.RssRepository.GetBy(username)
+	if cachedRss != nil {
+		c.Header("Content-Type", "application/xml; charset=utf-8")
+		c.String(http.StatusOK, *cachedRss)
+		return
+	}
+
 	tweetList, err := fc.TwitterRepository.GetLikesBy(username)
 	if err != nil {
 		log.Println(err)
@@ -26,6 +35,13 @@ func (fc FeedController) Show(c *gin.Context) {
 	}
 
 	rss, err := generateFeed(username, tweetList)
+	if err != nil {
+		log.Println(err)
+		c.String(http.StatusInternalServerError, "Error. Please check server log.")
+		return
+	}
+
+	err = fc.RssRepository.SetBy(username, rss)
 	if err != nil {
 		log.Println(err)
 		c.String(http.StatusInternalServerError, "Error. Please check server log.")
