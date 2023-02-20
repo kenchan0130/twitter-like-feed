@@ -28,7 +28,6 @@ func (t TwitterRepository) GetLikesBy(screenName string) ([]*models.Tweet, error
 		return nil, fmt.Errorf("user likes lookup error: %v", err)
 	}
 
-	tweetDateTimeLayout := "2006-01-02T15:04:05+0000"
 	authorIdList := lo.Map(likeResponse.Raw.Tweets, func(tweetObj *twitter.TweetObj, _ int) string {
 		return tweetObj.AuthorID
 	})
@@ -39,7 +38,7 @@ func (t TwitterRepository) GetLikesBy(screenName string) ([]*models.Tweet, error
 	}
 
 	tweets := lo.Map(likeResponse.Raw.Tweets, func(tweetObj *twitter.TweetObj, _ int) *models.Tweet {
-		tweetDateTime, _ := time.Parse(tweetDateTimeLayout, tweetObj.CreatedAt)
+		tweetDateTime, _ := time.Parse(time.RFC3339, tweetObj.CreatedAt)
 		return &models.Tweet{
 			ID:               tweetObj.ID,
 			Text:             tweetObj.Text,
