@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"fmt"
 	"github.com/coocood/freecache"
 	"github.com/kenchan0130/twitter-like-feed/controllers"
 	"github.com/kenchan0130/twitter-like-feed/repositories"
@@ -12,14 +11,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-type authorize struct {
-	Token string
-}
-
-func (a authorize) Add(req *http.Request) {
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", a.Token))
-}
 
 func Init() *gin.Engine {
 	r := gin.New()
