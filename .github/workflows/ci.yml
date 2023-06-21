@@ -24,7 +24,6 @@ jobs:
           go mod download
       - name: Test
         run: |
-          date
           go test -v ./...
         env:
           TWITTER_USER_NAME: ${{ secrets.TWITTER_USER_NAME }}
