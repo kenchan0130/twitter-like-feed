@@ -4,9 +4,9 @@ go 1.19
 
 require (
 	github.com/coocood/freecache v1.2.3
-	github.com/g8rswimmer/go-twitter/v2 v2.1.5
 	github.com/gin-gonic/gin v1.9.1
 	github.com/gorilla/feeds v1.1.1
+	github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621031114-b692d33e5bf1
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.3
@@ -35,6 +35,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/pquerna/otp v1.4.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect

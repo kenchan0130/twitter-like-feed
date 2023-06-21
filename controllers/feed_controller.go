@@ -52,7 +52,7 @@ func (fc FeedController) Show(c *gin.Context) {
 	c.String(http.StatusOK, rss)
 }
 
-func generateFeed(username string, tweetList []*models.Tweet) (string, error) {
+func generateFeed(username string, tweetList []models.Tweet) (string, error) {
 	feed := &feeds.Feed{
 		Title:       fmt.Sprintf("@%s like feed | Twitter Like Feed", username),
 		Link:        &feeds.Link{Href: fmt.Sprintf("https://twitter.com/%s/likes", username)},
@@ -64,7 +64,7 @@ func generateFeed(username string, tweetList []*models.Tweet) (string, error) {
 		},
 	}
 
-	feed.Items = lo.Map(tweetList, func(tweet *models.Tweet, _ int) *feeds.Item {
+	feed.Items = lo.Map(tweetList, func(tweet models.Tweet, _ int) *feeds.Item {
 		tweetURL := fmt.Sprintf("https://twitter.com/%s/status/%s", tweet.AuthorScreenName, tweet.ID)
 		return &feeds.Item{
 			Title:       fmt.Sprintf("@%s did LIKE a tweet of %s", username, tweet.AuthorScreenName),

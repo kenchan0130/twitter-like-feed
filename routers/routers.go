@@ -3,9 +3,9 @@ package routers
 import (
 	"fmt"
 	"github.com/coocood/freecache"
-	"github.com/g8rswimmer/go-twitter/v2"
 	"github.com/kenchan0130/twitter-like-feed/controllers"
 	"github.com/kenchan0130/twitter-like-feed/repositories"
+	"github.com/kenchan0130/unofficial-twitter-api-client-go/twitter"
 	"net/http"
 	"os"
 	"strconv"
@@ -45,15 +45,17 @@ func Init() *gin.Engine {
 		Cache:         freecache.NewCache(100 * 1024 * 1024), // 100 * 1024 * 1024 is 100MB
 		ExpireSeconds: cacheExpiresSec,
 	}
-	token := os.Getenv("BEARER_TOKEN")
+	username := os.Getenv("TWITTER_USER_NAME")
+	password := os.Getenv("TWITTER_USER_PASSWORD")
+	mfaSecret := os.Getenv("TWITTER_USER_MFA_SECRET")
+
+	client, err := twitter.NewClient(username, password, twitter.MFASecret(mfaSecret))
+	if err != nil {
+		panic(err)
+	}
+
 	twitterRepository := repositories.TwitterRepository{
-		Client: twitter.Client{
-			Authorizer: authorize{
-				Token: token,
-			},
-			Client: http.DefaultClient,
-			Host:   "https://api.twitter.com",
-		},
+		Client: client,
 	}
 	feedCtrl := controllers.FeedController{
 		TwitterRepository: twitterRepository,
