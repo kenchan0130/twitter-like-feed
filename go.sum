@@ -49,6 +49,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621031114-b692d33e5bf1 h1:CBqHPKLUUhmB5grsfBqBXNt7xtzg6GDPhE+m+eAAH7I=
 github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621031114-b692d33e5bf1/go.mod h1:qFOIbDXTy9JGWc3bTROfGdPkOtnylzuwNTONme97Jpg=
+github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621134201-fc639a252a25 h1:rvfE7mWJN/p6ystlPaFiFrEY+IOj79D2Z5Vd4ms+/Eg=
+github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621134201-fc639a252a25/go.mod h1:qFOIbDXTy9JGWc3bTROfGdPkOtnylzuwNTONme97Jpg=
 github.com/klauspost/cpuid/v2 v2.0.9/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=
 github.com/klauspost/cpuid/v2 v2.2.4 h1:acbojRNwl3o09bUq+yDCtZFc1aiwaAAxtcn8YkZXnvk=
 github.com/klauspost/cpuid/v2 v2.2.4/go.mod h1:RVVoqg1df56z8g3pUjL/3lE5UfnlrJX8tyFgg4nqhuY=

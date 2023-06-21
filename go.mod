@@ -6,7 +6,7 @@ require (
 	github.com/coocood/freecache v1.2.3
 	github.com/gin-gonic/gin v1.9.1
 	github.com/gorilla/feeds v1.1.1
-	github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621031114-b692d33e5bf1
+	github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621134201-fc639a252a25
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.3
