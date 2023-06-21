@@ -9,7 +9,7 @@ require (
 	github.com/kenchan0130/unofficial-twitter-api-client-go v0.0.0-20230621134201-fc639a252a25
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/samber/lo v1.38.1
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 )
 
 require (
